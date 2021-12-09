@@ -7,7 +7,16 @@ import SigninScreen from "./screen/signin.js";
 // import DashboardScreen from "./screen/dashboard.js";
 
 function AppRouter() {
-  return <div>hello router</div>;
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<SigninScreen />} />
+        <Route exact path="/signin" element={<SigninScreen />} />
+        <Route exact path="/signup" element={<SigninScreen />} />
+        {/* <Route exact path="/dashboard" element={<DashboardScreen />} /> */}
+      </Routes>
+    </Router>
+  );
 }
 
 export default AppRouter;
