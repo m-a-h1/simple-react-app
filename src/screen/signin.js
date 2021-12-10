@@ -6,12 +6,15 @@ import axios from "axios";
 
 function SigninScreen() {
   const [type, setType] = useState("sign in");
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
   const submit = async ({ username, password }) => {
     console.log(username, " ", password);
     console.log(process.env.REACT_APP_URL);
+
+    setLoading(true);
 
     // sign in request to the server
     if (type === "sign in") {
@@ -25,12 +28,14 @@ function SigninScreen() {
           { withCredentials: true }
         )
         .then((result) => {
+          setLoading(false);
           console.log("result: ", result);
           if (result.status === 200) {
             navigate("/dashboard", { state: { username: result.data.data.admin.username } });
           }
         })
         .catch((e) => {
+          setLoading(false);
           console.log(e);
           message.error("no user found");
         });
@@ -47,6 +52,7 @@ function SigninScreen() {
           { withCredentials: true }
         )
         .then((result) => {
+          setLoading(false);
           console.log("result: ", result);
           if (result.status === 201) {
             navigate("/dashboard", { state: { username: result.data.data.admin.username } });
@@ -117,7 +123,7 @@ function SigninScreen() {
               span: 16,
             }}
           >
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               {type}
             </Button>
           </Form.Item>

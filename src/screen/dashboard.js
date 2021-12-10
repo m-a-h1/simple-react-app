@@ -14,6 +14,7 @@ function DashboardScreen() {
 
   const [users, setUsers] = useState([]);
   const [logs, setLogs] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     getMyUsers();
@@ -21,15 +22,18 @@ function DashboardScreen() {
 
   // it get all logs
   const getLogs = () => {
+    setLoading(true);
     axios
       .get(`${process.env.REACT_APP_URL}/api/v1/admin/getlogs`, {
         withCredentials: true,
       })
       .then((result) => {
+        setLoading(false);
         console.log("result: ", result);
         if (result.status === 200) setLogs(result.data.data);
       })
       .catch((e) => {
+        setLoading(false);
         console.log(e);
       });
   };
@@ -74,7 +78,7 @@ function DashboardScreen() {
         </Col>
         <Col>
           <Space>
-            <Button style={{ backgroundColor: "lightgreen" }} onClick={getLogs}>
+            <Button style={{ backgroundColor: "lightgreen" }} onClick={getLogs} loading={loading}>
               get logs
             </Button>
             <Button style={{ backgroundColor: "red" }} onClick={logout}>
@@ -111,9 +115,12 @@ function DashboardScreen() {
   );
 }
 
-const FormComponent = ({ getLogs, getMyUsers }) => {
+const FormComponent = ({ getMyUsers }) => {
+  const [loading, setLoading] = useState(false);
+
   const submit = async ({ name, number }) => {
     console.log(name, " ", number);
+    setLoading(true);
 
     axios
       .post(
@@ -125,6 +132,7 @@ const FormComponent = ({ getLogs, getMyUsers }) => {
         { withCredentials: true }
       )
       .then((result) => {
+        setLoading(false);
         console.log("result: ", result);
         if (result.status === 200) {
           message.success("user created successfully");
@@ -132,6 +140,7 @@ const FormComponent = ({ getLogs, getMyUsers }) => {
         getMyUsers();
       })
       .catch((e) => {
+        setLoading(false);
         console.log("error: ", e);
         message.error("please signin first");
       });
@@ -184,7 +193,7 @@ const FormComponent = ({ getLogs, getMyUsers }) => {
           span: 16,
         }}
       >
-        <Button type="primary" htmlType="submit">
+        <Button type="primary" htmlType="submit" loading={loading}>
           create user
         </Button>
       </Form.Item>
