@@ -39,7 +39,7 @@ function SigninScreen() {
     } else {
       axios
         .post(
-          `${process.env.URL}/api/v1/admin/signin`,
+          `${process.env.REACT_APP_URL}/api/v1/admin/signin`,
           {
             username,
             password,
