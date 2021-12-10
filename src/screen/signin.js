@@ -14,39 +14,43 @@ function SigninScreen() {
 
     // sign in request to the server
     if (type === "sign in") {
-      try {
-        const result = await axios.post(
-          "http://localhost:4000/api/v1/admin/signin",
+      axios
+        .post(
+          `${process.env.URL}/api/v1/admin/signin`,
           {
             username,
             password,
           },
           { withCredentials: true }
-        );
+        )
+        .then((result) => {
+          console.log("result: ", result);
+          if (result.status === 200) {
+            navigate("/dashboard", { state: { username: result.data.data.admin.username } });
+          }
+        })
+        .catch((e) => {
+          console.log(e);
+          message.error("no user found");
+        });
 
-        console.log("result: ", result);
-        if (result.status === 200) {
-          navigate("/dashboard", { state: { username: result.data.data.admin.username } });
-        }
-      } catch (e) {
-        console.log(e);
-        message.error("no user found");
-      }
       // sing up requres to the server
     } else {
-      const result = await axios({
-        method: "post",
-        url: "http://localhost:4000/api/v1/admin/signup",
-        data: {
-          username,
-          password,
-        },
-        headers: { withCredentials: true },
-      });
-      console.log("result: ", result);
-      if (result.status === 201) {
-        navigate("/dashboard", { state: { username: result.data.data.admin.username } });
-      }
+      axios
+        .post(
+          `${process.env.URL}/api/v1/admin/signin`,
+          {
+            username,
+            password,
+          },
+          { withCredentials: true }
+        )
+        .then((result) => {
+          console.log("result: ", result);
+          if (result.status === 201) {
+            navigate("/dashboard", { state: { username: result.data.data.admin.username } });
+          }
+        });
     }
   };
 
