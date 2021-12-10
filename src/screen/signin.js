@@ -11,12 +11,13 @@ function SigninScreen() {
 
   const submit = async ({ username, password }) => {
     console.log(username, " ", password);
+    console.log(process.env.REACT_APP_URL);
 
     // sign in request to the server
     if (type === "sign in") {
       axios
         .post(
-          `${process.env.URL}/api/v1/admin/signin`,
+          `${process.env.REACT_APP_URL}/api/v1/admin/signin`,
           {
             username,
             password,
